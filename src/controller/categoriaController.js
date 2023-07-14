@@ -1,29 +1,29 @@
-import produtos from "../models/Produto.js";
+import categorias from "../models/Categoria.js";
 
-class produtosController {
+class categoriasController {
 
-    static pegaTodosProdutos = async (req, res) => {
+    static pegaTodosCategoria = async (req, res) => {
         try {
-            const dados = await produtos.find().populate("tamanho", '-_id').populate("cor", '-_id').populate("categoria", '-_id').exec();
+            const dados = await categorias.find()
             res.status(200).json(dados);
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static pegaProdutosPorId = async (req, res) => {
+    static pegaCategoriaPorId = async (req, res) => {
         try {
-            const id = mongoose.Types.ObjectId(req.params.id)
-            const dados = await produtos.findById(id).populate("tamanho", '-_id').populate("cor", '-_id').populate("categoria", '-_id').exec();
+            const id = new mongoose.Types.ObjectId(req.params.id)
+            const dados = await categorias.findById(id)
             res.status(200).json(dados);
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static adicionaProduto = async (req, res) => {
+    static adicionaCategoria = async (req, res) => {
         try {
-            const dados = new produtos(req.body);
+            const dados = new categorias(req.body);
             const dadosEnvio = await dados.save();
             res.status(201).send(dadosEnvio.toJSON());
         } catch (err) {
@@ -31,20 +31,20 @@ class produtosController {
         }
     }
 
-    static atualizaProduto = async (req, res) => {
+    static atualizaCategoria = async (req, res) => {
         try {
             const id = new mongoose.Types.ObjectId(req.params.id);
-            const dadosAtualizados = await produtos.findByIdAndUpdate(id, {$set: req.body});
+            const dadosAtualizados = await categorias.findByIdAndUpdate(id);
             res.status(200).send(dadosAtualizados.toJSON());
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static deletaProduto = async (req, res) => {
+    static deletaCategoria = async (req, res) => {
         try {
             const id = new mongoose.Types.ObjectId(req.params.id);
-            const dadosRemovidos = await produtos.findByIdAndDelete(id);
+            const dadosRemovidos = await categorias.findByIdAndDelete(id);
             res.status(200).send(dadosRemovidos.toJSON());
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
@@ -52,4 +52,4 @@ class produtosController {
     }
 }
 
-export default produtosController
+export default categoriasController

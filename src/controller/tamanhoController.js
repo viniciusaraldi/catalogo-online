@@ -1,50 +1,51 @@
-import produtos from "../models/Produto.js";
+import tamanhos from "../models/Tamanho.js";
+import mongoose from "mongoose";
 
-class produtosController {
+class tamanhosController {
 
-    static pegaTodosProdutos = async (req, res) => {
+    static pegaTodosTamanho = async (req, res) => {
         try {
-            const dados = await produtos.find().populate("tamanho", '-_id').populate("cor", '-_id').populate("categoria", '-_id').exec();
+            const dados = await tamanhos.find()
             res.status(200).json(dados);
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static pegaProdutosPorId = async (req, res) => {
+    static pegaTamanhoPorId = async (req, res) => {
         try {
-            const id = mongoose.Types.ObjectId(req.params.id)
-            const dados = await produtos.findById(id).populate("tamanho", '-_id').populate("cor", '-_id').populate("categoria", '-_id').exec();
+            const id = new mongoose.Types.ObjectId(req.params.id)
+            const dados = await tamanhos.findById(id)
             res.status(200).json(dados);
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static adicionaProduto = async (req, res) => {
+    static adicionaTamanho = async (req, res) => {
         try {
-            const dados = new produtos(req.body);
+            const dados = new tamanhos(req.body);
             const dadosEnvio = await dados.save();
-            res.status(201).send(dadosEnvio.toJSON());
+            res.status(201).send(dadosEnvio);
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static atualizaProduto = async (req, res) => {
+    static atualizaTamanho = async (req, res) => {
         try {
             const id = new mongoose.Types.ObjectId(req.params.id);
-            const dadosAtualizados = await produtos.findByIdAndUpdate(id, {$set: req.body});
+            const dadosAtualizados = await tamanhos.findByIdAndUpdate(id);
             res.status(200).send(dadosAtualizados.toJSON());
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
         }
     }
 
-    static deletaProduto = async (req, res) => {
+    static deletaTamanho = async (req, res) => {
         try {
             const id = new mongoose.Types.ObjectId(req.params.id);
-            const dadosRemovidos = await produtos.findByIdAndDelete(id);
+            const dadosRemovidos = await tamanhos.findByIdAndDelete(id);
             res.status(200).send(dadosRemovidos.toJSON());
         } catch (err) {
             res.status(500).send({message: "erro de servidor" + err});
@@ -52,4 +53,4 @@ class produtosController {
     }
 }
 
-export default produtosController
+export default tamanhosController

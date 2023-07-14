@@ -4,10 +4,9 @@ const produtoSchema = new mongoose.Schema({
     id: {type: String},
     name: {type: String, required: true},
     descricao: {type: String},
-    categoria: {type: String, required: true},
-    cor: {type: String, required: true},
-    id: {type: Number, required: true},
-    tamanho: {type: Array, required: true},
+    categoria: {type: mongoose.Schema.Types.ObjectId, ref: "categorias", required: true},
+    cor: {type: mongoose.Schema.Types.ObjectId, ref: "cores", required: true},
+    tamanho: {type: mongoose.Schema.Types.ObjectId, ref: "tamanhos", required: true},
     preco: {type: mongoose.Decimal128, required: true}
 });
 
